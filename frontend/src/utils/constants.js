@@ -1,4 +1,4 @@
-export const URL = "";
+export const URL = process.env.PUBLIC_URL || "";
 
 export const colorsList = [
   "#FFE4C4",
