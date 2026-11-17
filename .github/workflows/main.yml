@@ -139,14 +139,13 @@ jobs:
               fi
             fi
             test -f docker-compose.production.yml
-            if docker compose version >/dev/null 2>&1; then
+            if docker info >/dev/null 2>&1; then
               COMPOSE="docker compose"
-            elif sudo docker compose version >/dev/null 2>&1; then
+            elif sudo -n docker info >/dev/null 2>&1; then
               COMPOSE="sudo docker compose"
-            elif docker-compose version >/dev/null 2>&1; then
-              COMPOSE="docker-compose"
             else
-              COMPOSE="sudo docker-compose"
+              echo "Docker недоступен: проверь права пользователя"
+              exit 1
             fi
             $COMPOSE -f docker-compose.production.yml pull
             $COMPOSE -f docker-compose.production.yml up -d
