@@ -163,10 +163,11 @@ jobs:
             $COMPOSE -f docker-compose.production.yml exec -T backend sh -c "mkdir -p /backend_static/kittygram/static && cp -r /app/collected_static/. /backend_static/kittygram/static/"
 
       - name: Send Telegram notification
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=Деплой Kittygram успешно выполнен."
+        uses: appleboy/telegram-action@master
+              env:
+                TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+                TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        with:
+              to: ${{ secrets.TELEGRAM_CHAT_ID }}
+              token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+              message: Деплой Kittygram успешно выполнен.
